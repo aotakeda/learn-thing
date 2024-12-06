@@ -1,7 +1,6 @@
-import { MindMapData, Subtopic, Link } from "@/app/lib/schemas";
+import { Link, MindMapData, Subtopic, SubtopicSchema } from "@/app/lib/schemas";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { SubtopicSchema } from "@/app/lib/schemas";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -45,6 +44,22 @@ export function downloadJson(data: MindMapData, filename: string) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+export async function uploadJson(file: File): Promise<MindMapData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target?.result as string);
+        resolve(json as MindMapData);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsText(file);
+  });
 }
 
 const isValidUrl = (url: string): boolean => {

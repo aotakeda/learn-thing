@@ -9,20 +9,31 @@ import CreateMindMapForm from "./CreateMindMapForm";
 import Credits from "./Credits";
 import RetroGrid from "@/components/ui/retro-grid";
 import { useEffect } from "react";
+import FileUpload from "./FileUpload";
 
 interface CreateMindMapProps {
   fetchMindMap: (topic: string) => void;
+  setMindMapData: (data: any) => void;
 }
 
-const CreateMindMap = ({ fetchMindMap }: CreateMindMapProps) => {
+const CreateMindMap = ({
+  fetchMindMap,
+  setMindMapData,
+}: CreateMindMapProps) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CreateMindMapContent fetchMindMap={fetchMindMap} />
+      <CreateMindMapContent
+        fetchMindMap={fetchMindMap}
+        setMindMapData={setMindMapData}
+      />
     </Suspense>
   );
 };
 
-const CreateMindMapContent = ({ fetchMindMap }: CreateMindMapProps) => {
+const CreateMindMapContent = ({
+  fetchMindMap,
+  setMindMapData,
+}: CreateMindMapProps) => {
   const searchParams = useSearchParams();
   const error = searchParams.get("error") === "true";
 
@@ -45,6 +56,7 @@ const CreateMindMapContent = ({ fetchMindMap }: CreateMindMapProps) => {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <CreateMindMapForm onSubmit={fetchMindMap} />
+            <FileUpload handleUploadJson={setMindMapData} />
           </motion.div>
         </div>
         <RetroGrid />

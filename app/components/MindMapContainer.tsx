@@ -8,17 +8,29 @@ import CreateMindMap from "./CreateMindMap";
 import { useRouter } from "next/navigation";
 
 export default function MindMapContainer() {
-  const { data, isLoading, error, fetchMindMap, expandMap } = useMindMapData();
+  const { data, isLoading, error, fetchMindMap, setMindMapData, expandMap } =
+    useMindMapData();
   const router = useRouter();
 
   if (isLoading) return <LoadingMindMap />;
 
   if (error) {
     router.push("/?error=true");
-    return <CreateMindMap fetchMindMap={fetchMindMap} />;
+    return (
+      <CreateMindMap
+        fetchMindMap={fetchMindMap}
+        setMindMapData={setMindMapData}
+      />
+    );
   }
 
-  if (!data) return <CreateMindMap fetchMindMap={fetchMindMap} />;
+  if (!data)
+    return (
+      <CreateMindMap
+        fetchMindMap={fetchMindMap}
+        setMindMapData={setMindMapData}
+      />
+    );
 
   return (
     <div className="w-full h-full">
