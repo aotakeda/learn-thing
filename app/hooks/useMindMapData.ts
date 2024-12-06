@@ -1,6 +1,8 @@
 "use client";
 
+import { uploadJson } from "@/lib/utils";
 import { useState } from "react";
+import { toast } from "sonner";
 import { MindMapData, Subtopic } from "../lib/schemas";
 
 export function useMindMapData() {
@@ -27,10 +29,21 @@ export function useMindMapData() {
     }
   };
 
-  const setMindMapData = (data: MindMapData) => {
-    setData(data);
-    setIsLoading(false);
-  }
+  const setMindMapData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    uploadJson(file)
+      .then((data) => {
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch((_error) => {
+        toast.error(
+          "There was an error uploading your mind map, please try again."
+        );
+      });
+  };
 
   const mergeExpandedData = (
     existingData: MindMapData,
